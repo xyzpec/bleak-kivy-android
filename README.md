@@ -1,37 +1,88 @@
-## This is a kivy application that lists scanned devices in a desktop window
+# Bleak Kivy Android Demo
 
-- An iOS backend has not been implemented yet.
+这是一个使用Bleak库的Kivy应用程序，用于扫描和显示附近的蓝牙设备。
 
-- This kivy example can also be run on desktop.
+## 功能特性
 
-The default target architecture is arm64-v8a.
-If you have an older device, change it in the buildozer.spec file (android.archs = arch1, arch2, ..).
-Multiple targets are allowed (will significantly increase build time).
+- **桌面运行**: 可以在Windows、macOS、Linux桌面运行
+- **Android APK构建**: 通过GitHub Actions自动构建Android APK
+- **蓝牙扫描**: 扫描附近的蓝牙LE设备
+- **设备连接**: 连接到发现的设备并显示其GATT服务和特征
+- **实时日志**: 显示扫描和连接过程中的日志信息
 
-It can be run on Android via:
+## 桌面运行
 
-    pip3 install buildozer cython
-    buildozer android debug
-    # connect phone with USB and enable USB debugging
-    buildozer android deploy run logcat
+### 环境要求
+- Python 3.9+
+- Windows: pip install kivy bleak
+- macOS/Linux: pip install kivy bleak
 
-## To use with local version of bleak source:
+### 运行方法
+```bash
+pip install kivy bleak
+python main.py
+```
 
-Local source path can be specified using the P4A_bleak_DIR environment variable:
+## Android APK构建
 
-    P4A_bleak_DIR="path to bleak source" buildozer android debug
+由于Windows无法直接构建Android APK，我们使用GitHub Actions进行云构建。
 
+### 自动构建设置
 
+1. **创建GitHub仓库**
+   ```bash
+   # 运行setup-github.bat脚本
+   setup-github.bat
+   ```
 
-Note: changes to `bleak/**` will not be automatically picked up when rebuilding.
-Instead the recipe build must be cleaned:
+2. **访问GitHub Actions**
+   - 进入仓库的 "Actions" 标签页
+   - 点击 "Build Android APK" workflow
+   - 构建完成后在 "Artifacts" 部分下载APK
 
-    buildozer android p4a -- clean_recipe_build --local-recipes $(pwd)/../../bleak/backends/p4android/recipes bleak
+3. **手动触发构建**
+   - 在Actions页面点击 "Run workflow" 按钮
 
-## To use bleak in your own app:
+### APK安装
 
-- Copy the bleak folder under bleak/backends/p4android/recipes into the app recipes folder.
-Make sure that 'local_recipes' in buildozer.spec points to the app recipes folder.
-The latest version of bleak will be installed automatically.
+1. 下载生成的APK文件（bleak-kivy-apk.zip）
+2. 解压后将APK传输到Android设备
+3. 在Android设备上安装APK
+4. 授予蓝牙权限
 
-- Add 'bleak' and it's dependencies to the requirements in your buildozer.spec file.
+## 应用权限
+
+Android版本需要以下权限：
+- `BLUETOOTH`: 基础蓝牙功能
+- `BLUETOOTH_SCAN`: 扫描蓝牙设备
+- `BLUETOOTH_CONNECT`: 连接蓝牙设备
+- `ACCESS_FINE_LOCATION`: 位置权限（Android 6.0+必需）
+- `ACCESS_BACKGROUND_LOCATION`: 后台位置权限
+
+## 技术细节
+
+- **架构**: arm64-v8a (默认)
+- **Python版本**: 3.9.18
+- **Kivy版本**: 2.3.0
+- **Bleak版本**: 1.1.1
+
+## 故障排除
+
+### 构建失败
+- 检查GitHub Actions日志中的错误信息
+- 确认所有依赖版本兼容
+
+### 应用无法扫描设备
+- 确保Android设备支持蓝牙LE
+- 检查位置权限是否已授予
+- 确认蓝牙已开启
+
+### Windows本地构建（不推荐）
+如果一定要在本地构建，需要Linux环境：
+
+```bash
+# Ubuntu/Debian
+sudo apt install python3-pip git openjdk-11-jdk
+pip3 install buildozer cython kivy
+buildozer android debug
+```
