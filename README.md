@@ -29,14 +29,16 @@ python main.py
 
 ### 自动构建设置
 
-1. **创建GitHub仓库**
+1. **推送代码到GitHub**
    ```bash
-   # 运行setup-github.bat脚本
-   setup-github.bat
+   # 运行push-to-github.bat脚本
+   push-to-github.bat
    ```
+   按照提示创建Personal Access Token并完成推送
 
 2. **访问GitHub Actions**
-   - 进入仓库的 "Actions" 标签页
+   - 进入仓库: https://github.com/xyzpec/bleak-kivy-android
+   - 点击 "Actions" 标签页
    - 点击 "Build Android APK" workflow
    - 构建完成后在 "Artifacts" 部分下载APK
 
