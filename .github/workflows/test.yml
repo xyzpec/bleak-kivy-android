@@ -1,0 +1,21 @@
+name: Test Workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: List files
+      run: |
+        echo "Repository files:"
+        ls -la
+        echo "Workflow files:"
+        find .github -name "*.yml" -o -name "*.yaml" | head -10
