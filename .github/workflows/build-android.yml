@@ -1,0 +1,68 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop, main ]
+    paths:
+      - 'examples/kivy/**'
+      - '.github/workflows/build-android.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for proper bleak recipe access
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          git \
+          openjdk-11-jdk \
+          unzip \
+          autoconf \
+          libtool \
+          pkg-config \
+          zlib1g-dev \
+          libncurses5-dev \
+          libncursesw5-dev \
+          libtinfo5 \
+          cmake \
+          libffi-dev \
+          libssl-dev \
+          build-essential \
+          python3-dev
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip wheel setuptools
+        pip install buildozer cython kivy bleak
+
+    - name: Set Java 11 as default
+      run: |
+        sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+        java -version
+
+    - name: Build APK
+      working-directory: examples/kivy
+      run: |
+        export P4A_bleak_DIR="${GITHUB_WORKSPACE}/bleak/backends/p4android/recipes"
+        echo "Using bleak recipes from: $P4A_bleak_DIR"
+        ls -la "$P4A_bleak_DIR"
+        buildozer android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: bleak-kivy-apk
+        path: examples/kivy/bin/*.apk
+        retention-days: 7
