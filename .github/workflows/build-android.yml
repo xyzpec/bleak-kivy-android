@@ -36,10 +36,10 @@ jobs:
         java -version
 
     - name: Build APK
-      working-directory: examples/kivy
       run: |
-        export P4A_bleak_DIR="${GITHUB_WORKSPACE}/bleak/backends/p4android/recipes"
-        echo "Building APK..."
+        cd examples/kivy
+        echo "Current directory: $(pwd)"
+        echo "Starting APK build with PyPI bleak package..."
         buildozer android debug
 
     - name: Upload APK

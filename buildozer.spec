@@ -265,7 +265,7 @@ p4a.branch = develop
 
 # (str) The directory in which python-for-android should look for your own build recipes (if any)
 #p4a.local_recipes = recipes
-p4a.local_recipes = ${P4A_bleak_DIR:-../../bleak/backends/p4android/recipes}
+# p4a.local_recipes = ../../bleak/backends/p4android/recipes  # Disabled for PyPI bleak package
 
 # (str) Filename to the hook for p4a
 #p4a.hook =
