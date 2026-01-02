@@ -3,19 +3,17 @@ name: Build Android APK
 on:
   workflow_dispatch:
   push:
-    branches: [ develop, main ]
-    paths:
-      - 'examples/kivy/**'
-      - '.github/workflows/build-android.yml'
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Fetch full history for proper bleak recipe access
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -25,22 +23,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y \
-          git \
-          openjdk-11-jdk \
-          unzip \
-          autoconf \
-          libtool \
-          pkg-config \
-          zlib1g-dev \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libtinfo5 \
-          cmake \
-          libffi-dev \
-          libssl-dev \
-          build-essential \
-          python3-dev
+        sudo apt-get install -y git openjdk-11-jdk unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev build-essential python3-dev
 
     - name: Install Python dependencies
       run: |
@@ -56,8 +39,7 @@ jobs:
       working-directory: examples/kivy
       run: |
         export P4A_bleak_DIR="${GITHUB_WORKSPACE}/bleak/backends/p4android/recipes"
-        echo "Using bleak recipes from: $P4A_bleak_DIR"
-        ls -la "$P4A_bleak_DIR"
+        echo "Building APK..."
         buildozer android debug
 
     - name: Upload APK
