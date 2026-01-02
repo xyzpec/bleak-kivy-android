@@ -29,21 +29,30 @@ python main.py
 
 ### 自动构建设置
 
-1. **推送代码到GitHub**
+#### 步骤1: 推送代码到GitHub（已完成）
+代码已经使用Personal Access Token推送到GitHub仓库。
+
+#### 步骤2: 访问GitHub Actions
+1. 打开: https://github.com/xyzpec/bleak-kivy-android
+2. 点击 **"Actions"** 标签页
+3. 如果看到多个workflows，选择 **"Build Android APK"**
+4. 点击 **"Run workflow"** 按钮（右上角 ▶️）
+5. 等待构建完成（约10-15分钟）
+
+#### 步骤3: 下载APK
+构建成功后：
+1. 在workflow结果页面找到 **"Artifacts"** 部分
+2. 点击 **"bleak-kivy-apk"** 下载APK文件
+3. 将APK传输到Android设备安装
+
+#### 故障排除
+如果Actions页面显示"No workflow runs yet":
+1. 刷新页面等待几分钟
+2. 检查workflow文件语法是否正确
+3. 尝试手动推送最新更改：
    ```bash
-   # 运行push-to-github.bat脚本
-   push-to-github.bat
+   git push origin main
    ```
-   按照提示创建Personal Access Token并完成推送
-
-2. **访问GitHub Actions**
-   - 进入仓库: https://github.com/xyzpec/bleak-kivy-android
-   - 点击 "Actions" 标签页
-   - 点击 "Build Android APK" workflow
-   - 构建完成后在 "Artifacts" 部分下载APK
-
-3. **手动触发构建**
-   - 在Actions页面点击 "Run workflow" 按钮
 
 ### APK安装
 
